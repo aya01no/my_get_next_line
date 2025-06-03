@@ -9,3 +9,69 @@
 /*   Updated: 2025-05-29 08:19:23 by ayayamad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	s_len;
+
+	s_len = 0;
+	while (s[s_len])
+		s_len++;
+	return (s_len);
+}
+
+char	*strjoin_and_free(char *stash, char *buf)
+{
+	char		*dst;
+	size_t		i;
+	size_t		j;
+
+	dst = malloc((ft_strlen(stash) + ft_strlen(buf) + 1) * sizeof(char));
+	if (!dst)
+		return (NULL);
+	i = 0;
+	while (i < ft_strlen(stash))
+	{
+		dst[i] = stash[i];
+		i++;
+	}
+	j = 0;
+	while (j < ft_strlen(buf))
+	{
+		dst[i + j] = buf[j];
+		j++;
+	}
+	dst[i + j] = '\0';
+	return (dst);
+}
+
+char	*strnchr(char *s, char *c)
+{
+	while (*s && *s != c)
+		s++;
+	if (*s != c)
+		return (NULL);
+	else
+		return ((char *)s);
+}
+
+char	*get_next_line(int fd)
+{
+	char		*buf;
+	static char	*stash;
+	ssize_t		bytes_read;
+
+	stash = NULL;
+	buf = malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	bytes_read = read(fd, buf, BUFFER_SIZE);
+	while (strnchr(stash, '\n') && bytes_read > 0)
+	{
+		bytes_read = read(fd, buf, BUFFER_SIZE);
+		buf[bytes_read] = '\0';
+		stash = strjoin_and_free(stash, buf);
+	}
+	return(stash);
+}

@@ -9,3 +9,9 @@
 /*   Updated: 2025-06-02 03:45:38 by ayayamad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+
+# include <unistd.h>
+# include <stdlib.h>
+#endif
