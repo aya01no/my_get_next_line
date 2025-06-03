@@ -14,4 +14,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+char	*stash_kiridasi(char *stash);
 #endif
