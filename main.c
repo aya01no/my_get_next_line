@@ -1,44 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ayayamad <ayayamad@student.42tokyo.jp>     #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025-06-07 05:32:39 by ayayamad          #+#    #+#             */
+/*   Updated: 2025-06-07 05:32:39 by ayayamad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
 
-char	*stash_kiridasi(char *stash);
-
-int main(void)
+int	main(void)
 {
-	char *stash = "hello\nworld\n";
-	char *line;
+	int		fd;
+	char	*line;
 
-	line = stash_kiridasi(stash);
-	if (line)
-		printf("切り出した一行: %s\n", line);
-	else
-		printf("NULLが返されました\n");
-	return(0);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	s_len;
-
-	s_len = 0;
-	while (s[s_len])
-		s_len++;
-	return (s_len);
-}
-
-char	*stash_kiridasi(char *stash)
-{
-	int		i;
-	char	*nmade;
-
-	i = 0;
-	nmade = malloc(ft_strlen(stash));
-	while (stash[i] != '\n')
-	{
-		nmade[i] = stash[i];
-		i++;
-	}
-	nmade[i] = '\n';
-	return (nmade);
+	fd = open("example.txt", O_RDONLY);
+	line = get_next_line(fd);
+	printf ("%s", line);
+	return (0);
 }

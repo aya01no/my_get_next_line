@@ -47,14 +47,17 @@ char	*strjoin_and_free(char *stash, char *buf)
 	return (dst);
 }
 
-char	*strchr(char *s, char *c)
+char	*ft_strchr(char *stash, int c)
 {
-	while (*s && *s != c)
-		s++;
-	if (*s != c)
+	char	*uc;
+
+	uc = (char *)c;
+	while (*stash && *stash != *uc)
+		stash++;
+	if (*stash != *uc)
 		return (NULL);
 	else
-		return ((char *)s);
+		return (stash);
 }
 
 char	*stash_kiridasi(char *stash)
@@ -63,6 +66,9 @@ char	*stash_kiridasi(char *stash)
 	size_t	i;
 
 	nmade = malloc(ft_strlen(stash) + 1);
+	if (!nmade)
+		return (NULL);
+	i = 0;
 	while (stash[i] != '\n')
 	{
 		nmade[i] = stash[i];

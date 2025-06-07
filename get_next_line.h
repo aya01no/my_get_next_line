@@ -14,9 +14,12 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
+# include <stdio.h>
 
+char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*strjoin_and_free(char *stash, char *buf);
-char	*strchr(char *s, char *c);
+char	*ft_strchr(char *s, char *c);
 char	*stash_kiridasi(char *stash);
 #endif
