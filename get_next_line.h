@@ -15,5 +15,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+size_t	ft_strlen(const char *s);
+char	*strjoin_and_free(char *stash, char *buf);
+char	*strchr(char *s, char *c);
 char	*stash_kiridasi(char *stash);
 #endif
