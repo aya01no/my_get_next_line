@@ -24,20 +24,30 @@
 char	*get_next_line(int fd)
 {
 
+	// readする都度入る　二回目以降はstashにうつす
 	char			*buf;
+	// bufに入ってるものを保存しておく。\nが来て出力したらそれまでのを削除する
 	static char		*stash;
+	// これいらなくね？読んだ感じstashの一時保存だけどなくて良さそう この周辺が怪しい
 	char			*tmp;
+	// readするときのファイルの残り文字　負の数(-1)ならエラーハンドリング　終端は０
 	ssize_t			bytes_read;
 
+	//stashの初期化。
 	stash = NULL;
-	if (BUFFER_SIZE < 0)
+	if (BUFFER_SIZE < 0 || BUFFER_SIZE > SSIZE_MAX)
 		return (NULL);
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
 	bytes_read = read(fd, buf, BUFFER_SIZE);
-	while (ft_strchr(stash, "\n") && bytes_read > 0)
+	if (bytes_read == -1)
 	{
+		 
+	}
+	while (ft_strchr(buf, "\n") && bytes_read > 0)
+	{
+
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		buf[bytes_read] = '\0';
 		tmp = strjoin_and_free(stash, buf);

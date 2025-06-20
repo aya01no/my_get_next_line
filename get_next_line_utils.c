@@ -43,8 +43,8 @@ char	*strjoin_and_free(char *stash, char *buf)
 		j++;
 	}
 	dst[i + j] = '\0';
-	free(stash);
-	return (dst);
+	free(buf);
+	return (stash);
 }
 
 char	*ft_strchr(char *stash, int c)
