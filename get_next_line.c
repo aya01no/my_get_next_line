@@ -42,12 +42,9 @@ char	*get_next_line(int fd)
 		return (NULL);
 	bytes_read = read(fd, buf, BUFFER_SIZE);
 	if (bytes_read == -1)
-	{
-		 
-	}
 	while (ft_strchr(buf, "\n") && bytes_read > 0)
 	{
-
+		
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		buf[bytes_read] = '\0';
 		tmp = strjoin_and_free(stash, buf);
