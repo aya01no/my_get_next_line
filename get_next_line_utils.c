@@ -16,34 +16,50 @@ size_t	ft_strlen(const char *s)
 	size_t	s_len;
 
 	s_len = 0;
+	if (!s)
+		return (NULL);
 	while (s[s_len])
 		s_len++;
 	return (s_len);
 }
 
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char	*d;
+	unsigned char	*s;
+
+	if (!dst && !src)
+		return (NULL);
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
+	while (n--)
+	{
+		*d++ = *s++;
+	}
+	return (dst);
+}
+
 char	*strjoin_and_free(char *stash, char *buf)
 {
 	char		*dst;
-	size_t		i;
-	size_t		j;
+	size_t		stash_len;
+	size_t		buf_len;
 
-	dst = malloc((ft_strlen(stash) + ft_strlen(buf) + 1) * sizeof(char));
+	stash_len = 0;
+	if (stash)
+		stash_len = ft_strlen(stash);
+	buf_len = ft_strlen(buf);
+	dst = malloc((stash_len + buf_len + 1) * sizeof(char));
 	if (!dst)
 		return (NULL);
-	i = 0;
-	while (i < ft_strlen(stash))
+	if (stash)
 	{
-		dst[i] = stash[i];
-		i++;
+		ft_memcpy(dst, stash, ft_strlen(stash));
+		free(stash);
 	}
-	j = 0;
-	while (j < ft_strlen(buf))
-	{
-		dst[i + j] = buf[j];
-		j++;
-	}
-	dst[i + j] = '\0';
+	ft_memcpy(dst + stash_len, buf, buf_len + 1);
 	free(buf);
+	stash = dst;
 	return (stash);
 }
 
