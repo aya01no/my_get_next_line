@@ -39,30 +39,6 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char	*strjoin_and_free(char *stash, char *buf)
-{
-	char		*dst;
-	size_t		stash_len;
-	size_t		buf_len;
-
-	stash_len = 0;
-	if (stash)
-		stash_len = ft_strlen(stash);
-	buf_len = ft_strlen(buf);
-	dst = malloc((stash_len + buf_len + 1) * sizeof(char));
-	if (!dst)
-		return (NULL);
-	if (stash)
-	{
-		ft_memcpy(dst, stash, ft_strlen(stash));
-		free(stash);
-	}
-	ft_memcpy(dst + stash_len, buf, buf_len + 1);
-	free(buf);
-	stash = dst;
-	return (stash);
-}
-
 char	*ft_strchr(char *stash, int c)
 {
 	char	*uc;
@@ -74,22 +50,4 @@ char	*ft_strchr(char *stash, int c)
 		return (NULL);
 	else
 		return (stash);
-}
-
-char	*stash_kiridasi(char *stash)
-{
-	char	*nmade;
-	size_t	i;
-
-	nmade = malloc(ft_strlen(stash) + 1);
-	if (!nmade)
-		return (NULL);
-	i = 0;
-	while (stash[i] != '\n')
-	{
-		nmade[i] = stash[i];
-		i++;
-	}
-	nmade[i] = '\n';
-	return (nmade);
 }
