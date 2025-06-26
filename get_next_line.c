@@ -12,13 +12,13 @@
 
 #include "get_next_line.h"
 
-読むのと、readのエラーハンドリングする関数
-void	read_line(int fd, char *buf)
+void	read_line(int fd, char *buf, char *stash)
 {
 	ssize_t			*bytes_read;
 
 	while (!(ft_strchr(buf, "\n")))
 	{
+		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
 			free(buf);
@@ -28,13 +28,12 @@ void	read_line(int fd, char *buf)
 		{
 			
 		}
-		
-		bytes_read = read(fd, buf, BUFFER_SIZE);
 		buf[bytes_read] = '\0';
-		tmp = strjoin_and_free(stash, buf);
+		strjoin_and_free(stash, buf);
 	}
+	stash_kiridasi(stash);
 }
-二回目以降のreadをするときにbufからstashに入れてstash を更新する関数
+
 char	*strjoin_and_free(char *stash, char *buf)
 {
 	char		*dst;
@@ -59,7 +58,6 @@ char	*strjoin_and_free(char *stash, char *buf)
 	return (stash);
 }
 
-改行文字が来たときにstashから改行までを切り出して出力する関数
 char	*stash_kiridasi(char *stash)
 {
 	char	*nmade;
@@ -78,10 +76,8 @@ char	*stash_kiridasi(char *stash)
 	return (nmade);
 }
 
-本体　それぞれの関数呼び出すのと、最後にstashをreturnする？print?
 char	*get_next_line(int fd)
 {
-
 	char			*buf;
 	static char		*stash;
 	char			*tmp;
@@ -92,7 +88,7 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	read_line(fd, buf);
+	read_line(fd, buf, stash);
 	stash = tmp;
 	return (stash_kiridasi(stash));
 }
