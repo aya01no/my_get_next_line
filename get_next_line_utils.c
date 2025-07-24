@@ -39,15 +39,20 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-int	*ft_strchr(char *stash, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	char	*uc;
+	unsigned char	uc;
 
-	uc = (char *)c;
-	while (*stash && *stash != *uc)
-		stash++;
-	if (*stash != *uc)
-		return (0);
-	else
-		return (1);
+	if (!s)
+		return (NULL);
+	uc = (unsigned char)c;
+	while (*s)
+	{
+		if (*s == uc)
+			return ((char *)s);
+		s++;
+	}
+	if (uc == '\0')
+		return ((char *)s);
+	return (NULL);
 }

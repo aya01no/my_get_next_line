@@ -12,76 +12,125 @@
 
 #include "get_next_line.h"
 
-void	read_line(int fd, char *buf, char *stash)
-{
-	ssize_t	bytes_read;
-
-	while (!(ft_strchr(buf, "\n")) && bytes_read != 0)
-	{
-		bytes_read = read(fd, buf, (ssize_t)BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(buf);
-			printf("%s", "read error");
-		}
-		buf[bytes_read] = '\0';
-		strjoin_and_free(stash, buf);
-	}
-	stash_kiridasi(stash);
-}
-
-char	*strjoin_and_free(char *stash, char *buf)
+static char	*strjoin_and_free(char *stash, char *buf)
 {
 	char	*dst;
 	int		stash_len;
 	int		buf_len;
 
-	stash_len = 0;
-	if (stash)
+	if (!stash)
+		stash_len = 0;
+	else
 		stash_len = ft_strlen(stash);
 	buf_len = ft_strlen(buf);
 	dst = malloc((stash_len + buf_len + 1) * sizeof(char));
 	if (!dst)
+	{
+		free(stash);
 		return (NULL);
+	}
 	if (stash)
 	{
 		ft_memcpy(dst, stash, ft_strlen(stash));
 		free(stash);
 	}
 	ft_memcpy(dst + stash_len, buf, buf_len + 1);
+	return (dst);
+}
+
+static char	*read_to_stash(int fd, char *stash)
+{
+	char	*buf;
+	ssize_t	bytes_read;
+
+	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (NULL);
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		if (stash && (ft_strchr(stash, '\n') == NULL))
+			break ;
+		bytes_read = read(fd, buf, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(buf);
+			return (NULL);
+		}
+		buf[bytes_read] = '\0';
+		stash = strjoin_and_free(stash, buf);
+		if (!stash)
+			break ;
+	}
 	free(buf);
-	stash = dst;
 	return (stash);
 }
 
-char	*stash_kiridasi(char *stash)
+static char	*extract_stash(char *stash)
 {
-	char	*nmade;
-	size_t	i;
+	char	*line;
+	size_t	len;
 
-	nmade = malloc(ft_strlen(stash) + 1);
-	if (!nmade)
+	if (!stash || !*stash)
+		return (NULL);
+	len = 0;
+	while (stash[len] && stash[len] != '\n')
+		len++;
+	if (stash[len] == '\n')
+		len++;
+	line = malloc(sizeof(char) * (len) + 1);
+	ft_memcpy(line, stash, len);
+	line[len] = '\0';
+	return (line);
+}
+
+static char	*update_stash(char *old_stash)
+{
+	size_t	i;
+	char	*new_stash;
+
+	if (!old_stash)
 		return (NULL);
 	i = 0;
-	while (stash[i] != '\n')
-	{
-		nmade[i] = stash[i];
+	while (old_stash[i] && old_stash[i] != '\n')
 		i++;
+	if (old_stash[i] == '\0')
+	{
+		free(old_stash);
+		return (NULL);
 	}
-	nmade[i] = '\n';
-	return (nmade);
+	new_stash = malloc(sizeof(char) * (ft_strlen(old_stash) - i));
+	if (!new_stash)
+	{
+		free(old_stash);
+		return (NULL);
+	}
+	ft_memcpy(new_stash, &old_stash[i + 1], ft_strlen(old_stash) - i);
+	free(old_stash);
+	return (new_stash);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
 	static char	*stash;
+	char		*line;
 
-	if (BUFFER_SIZE < 0 || BUFFER_SIZE > SSIZE_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
+	stash = read_to_stash(fd, stash);
+	if (!stash || *stash == '\0')
+	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
-	read_line(fd, buf, stash);
-	return (stash_kiridasi(stash));
+	}
+	line = extract_stash(stash);
+	if (!line)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
+	stash = update_stash(stash);
+	return (line);
 }
