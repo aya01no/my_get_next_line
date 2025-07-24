@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 
 	s_len = 0;
 	if (!s)
-		return (NULL);
+		return (0);
 	while (s[s_len])
 		s_len++;
 	return (s_len);
@@ -39,7 +39,7 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char	*ft_strchr(char *stash, int c)
+int	*ft_strchr(char *stash, int c)
 {
 	char	*uc;
 
@@ -47,7 +47,7 @@ char	*ft_strchr(char *stash, int c)
 	while (*stash && *stash != *uc)
 		stash++;
 	if (*stash != *uc)
-		return (NULL);
+		return (0);
 	else
-		return (stash);
+		return (1);
 }

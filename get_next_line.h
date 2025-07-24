@@ -13,15 +13,16 @@
 # define GET_NEXT_LINE_H
 
 # define _POSIX_C_SOURCE 200809L
-# include <unistd.h>
-# include <stdlib.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*strjoin_and_free(char *stash, char *buf);
-char	*ft_strchr(char *s, char *c);
+int		*ft_strchr(char *stash, int c);
 char	*stash_kiridasi(char *stash);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 #endif

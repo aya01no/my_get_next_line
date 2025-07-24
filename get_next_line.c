@@ -14,19 +14,15 @@
 
 void	read_line(int fd, char *buf, char *stash)
 {
-	ssize_t			*bytes_read;
+	ssize_t	bytes_read;
 
-	while (!(ft_strchr(buf, "\n")))
+	while (!(ft_strchr(buf, "\n")) && bytes_read != 0)
 	{
-		bytes_read = read(fd, buf, BUFFER_SIZE);
+		bytes_read = read(fd, buf, (ssize_t)BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
 			free(buf);
 			printf("%s", "read error");
-		}
-		if (bytes_read == 0)
-		{
-			
 		}
 		buf[bytes_read] = '\0';
 		strjoin_and_free(stash, buf);
@@ -36,9 +32,9 @@ void	read_line(int fd, char *buf, char *stash)
 
 char	*strjoin_and_free(char *stash, char *buf)
 {
-	char		*dst;
-	size_t		stash_len;
-	size_t		buf_len;
+	char	*dst;
+	int		stash_len;
+	int		buf_len;
 
 	stash_len = 0;
 	if (stash)
@@ -78,17 +74,14 @@ char	*stash_kiridasi(char *stash)
 
 char	*get_next_line(int fd)
 {
-	char			*buf;
-	static char		*stash;
-	char			*tmp;
+	char		*buf;
+	static char	*stash;
 
-	stash = NULL;
 	if (BUFFER_SIZE < 0 || BUFFER_SIZE > SSIZE_MAX)
 		return (NULL);
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
 	read_line(fd, buf, stash);
-	stash = tmp;
 	return (stash_kiridasi(stash));
 }
