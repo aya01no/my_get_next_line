@@ -49,12 +49,13 @@ static char	*read_to_stash(int fd, char *stash)
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
-		if (stash && (ft_strchr(stash, '\n') == NULL))
+		if (stash && ft_strchr(stash, '\n'))
 			break ;
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read == -1)
 		{
 			free(buf);
+			free(stash);
 			return (NULL);
 		}
 		buf[bytes_read] = '\0';
