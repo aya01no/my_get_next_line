@@ -79,7 +79,9 @@ static char	*extract_stash(char *stash)
 		len++;
 	if (stash[len] == '\n')
 		len++;
-	line = malloc(sizeof(char) * (len) + 1);
+	line = malloc(sizeof(char) * (len + 1));
+	if (!line)
+		return (NULL);
 	ft_memcpy(line, stash, len);
 	line[len] = '\0';
 	return (line);
@@ -88,6 +90,7 @@ static char	*extract_stash(char *stash)
 static char	*update_stash(char *old_stash)
 {
 	size_t	i;
+	size_t	old_len;
 	char	*new_stash;
 
 	if (!old_stash)
@@ -100,13 +103,14 @@ static char	*update_stash(char *old_stash)
 		free(old_stash);
 		return (NULL);
 	}
-	new_stash = malloc(sizeof(char) * (ft_strlen(old_stash) - i));
-	if (!new_stash)
+	i++;
+	old_len = ft_strlen(old_stash);
+	if (i >= old_len)
 	{
 		free(old_stash);
 		return (NULL);
 	}
-	ft_memcpy(new_stash, &old_stash[i + 1], ft_strlen(old_stash) - i);
+	new_stash = malloc(sizeof(char) * (ft_strlen(old_stash) - i));
 	free(old_stash);
 	return (new_stash);
 }
